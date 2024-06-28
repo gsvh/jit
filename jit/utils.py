@@ -1,19 +1,29 @@
 from .llm import generate_pr_description
 import subprocess
 import json
+import logging
+log = logging.getLogger("rich")
 
-def branch_is_behind(repo):
-    # Check if the current branch is behind the remote
+
+def branch_is_behind(repo, dry):
+    log.info("Checking if the current branch is behind the remote...")
     behind = repo.git.rev_list('--left-right', 'origin/develop...HEAD', '--count')
     behind_count = int(behind.split()[0])
-    print(behind)
     if behind_count > 0:
-        print(f'Current branch is behind the remote by {behind_count} commits.')
-        return True
+        log.warning(f'Current branch is behind the remote by {behind_count} commits.')
+        
+        # If ran in dry mode, don't return True
+        if not dry:
+            return True
+        else:
+            return False
+
+    log.info("Current branch is up-to-date with the remote.")
     return False
     
 
 def parse_diffs(diffs):
+    log.debug("Parsing diffs...")
     diff_list = diffs.split('\n')
     individual_diffs = []
     current_diff = []
@@ -28,31 +38,28 @@ def parse_diffs(diffs):
     if current_diff:
         individual_diffs.append('\n'.join(current_diff))
     
+    log.debug(f"Parsed {len(individual_diffs)} diffs.")
     return individual_diffs
 
 
 def generate_pr(repo):
-    
-    print('Getting the latest commits on the current branch...')
-    # Get latest commits on the current branch vs main/master
+    log.info('Finding the latest commits from the current branch...')
     commits = list(repo.iter_commits('develop..HEAD'))
     commit_messages = [commit.message for commit in commits]
 
-    print('Number of commits:', len(commit_messages))
+    log.info(f'Number of commits found: {len(commit_messages)}')
     
-    print('Getting the diffs between the current branch and develop...')
-    # Get diffs
+    log.info('Finding diffs between the current branch and develop...')
     diffs = parse_diffs(repo.git.diff('develop', 'HEAD'))
-    print('Number of diffs:', len(diffs))
+    log.info(f'Number of diffs found: {len(diffs)}')
     
-    # Generate PR description
     pr_description = generate_pr_description(commit_messages, diffs)
-        
+    log.info('Generated PR description successfully.')
     return pr_description
 
 
-
 def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch):
+    log.info("Creating a pull request via GitHub CLI...")
     command = [
         "gh", "api",
         "--method", "POST",
@@ -67,12 +74,16 @@ def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_bran
     
     result = subprocess.run(command, text=True, capture_output=True)
     if result.returncode == 0:
-        print("Pull request created successfully.")
+        log.info("Pull request created successfully.")
         try:
             response = json.loads(result.stdout)
-            return response['url']
-        except (json.JSONDecodeError, KeyError):
+            log.debug(f"Pull request URL: {response['html_url']}")
+            return response['html_url']
+        except (json.JSONDecodeError, KeyError) as e:
+            log.error("Failed to parse response from GitHub API.")
+            log.debug(e)
             return 'Failed to parse response.'
     else:
-        print("Failed to create pull request.")
+        log.error("Failed to create pull request.")
+        log.debug(result.stderr)
         return ''
