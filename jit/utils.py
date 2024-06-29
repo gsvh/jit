@@ -3,11 +3,12 @@ import subprocess
 import json
 import logging
 log = logging.getLogger("rich")
+from config import BASE_BRANCH
 
 
 def branch_is_behind(repo, dry):
     log.info("Checking if the current branch is behind the remote...")
-    behind = repo.git.rev_list('--left-right', 'origin/develop...HEAD', '--count')
+    behind = repo.git.rev_list('--left-right', f'origin/{BASE_BRANCH}...HEAD', '--count')
     behind_count = int(behind.split()[0])
     if behind_count > 0:
         log.warning(f'Current branch is behind the remote by {behind_count} commits.')
@@ -44,13 +45,13 @@ def parse_diffs(diffs):
 
 def generate_pr(repo):
     log.info('Finding the latest commits from the current branch...')
-    commits = list(repo.iter_commits('develop..HEAD'))
+    commits = list(repo.iter_commits(f'{BASE_BRANCH}..HEAD'))
     commit_messages = [commit.message for commit in commits]
 
     log.info(f'Number of commits found: {len(commit_messages)}')
     
-    log.info('Finding diffs between the current branch and develop...')
-    diffs = parse_diffs(repo.git.diff('develop', 'HEAD'))
+    log.info(f'Finding diffs between the current branch and {BASE_BRANCH}...')
+    diffs = parse_diffs(repo.git.diff(BASE_BRANCH, 'HEAD'))
     log.info(f'Number of diffs found: {len(diffs)}')
     
     pr_description = generate_pr_description(commit_messages, diffs)
