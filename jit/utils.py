@@ -45,7 +45,7 @@ def parse_diffs(diffs):
 
 def generate_pr(repo):
     log.info('Finding the latest commits from the current branch...')
-    commits = list(repo.iter_commits(f'{BASE_BRANCH}..HEAD'))
+    commits = list(repo.iter_commits(f'{BASE_BRANCH}...HEAD'))
     commit_messages = [commit.message for commit in commits]
 
     log.info(f'Number of commits found: {len(commit_messages)}')
