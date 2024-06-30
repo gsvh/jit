@@ -123,6 +123,7 @@ def ensure_directory_and_config():
 
 def update_config(repo_name):
     """Updates the configuration file with the repository's owner and base branch."""
+    ensure_directory_and_config()
     current_owner, current_base_branch = get_repo_config(repo_name)
     owner = input("Enter the repository's {purple_owner} (current: {current_owner_or_unset}): ".format(
         purple_owner=make_purple("owner"),
@@ -132,8 +133,14 @@ def update_config(repo_name):
         purple_base_branch=make_purple("base branch"),
         current_branch_or_unset=current_base_branch if current_base_branch else 'Unset'
     ))
-    config = {repo_name: {'owner': owner, 'base_branch': base_branch}}
-    with open(CONFIG_FILE_PATH, 'a') as config_file:
+
+    # Load the existing config data and update it
+    with open(CONFIG_FILE_PATH, 'r') as config_file:
+        config = yaml.safe_load(config_file) or {}
+    config[repo_name] = {'owner': owner, 'base_branch': base_branch}
+
+    # Write the updated configuration back to the file
+    with open(CONFIG_FILE_PATH, 'w') as config_file:
         yaml.dump(config, config_file, default_flow_style=False, sort_keys=False)
     log.info(f"Updated configuration for {repo_name} in {CONFIG_FILE_PATH}.")
     return (owner, base_branch)
