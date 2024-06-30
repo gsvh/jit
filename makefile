@@ -27,7 +27,7 @@ install_jit_editable:
 
 
 ## uninstall_jit: Uninstall the jit package.
-uninstall_jit:
+uninstall:
 	@echo "Uninstalling jit"
 	@bash scripts/uninstall.sh
 	@echo "jit uninstalled successfully"
