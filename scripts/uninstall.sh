@@ -13,21 +13,21 @@ uninstall_brew_deps() {
     fi
 }
 
-# Function to uninstall pip dependencies with options
-uninstall_pip_deps() {
-    echo "Listing pip dependencies from requirements.txt:"
+# Function to uninstall pip3 dependencies with options
+uninstall_pip3_deps() {
+    echo "Listing pip3 dependencies from requirements.txt:"
     echo "--------------------"
     cat requirements.txt
     echo ""
     echo "--------------------"
-    read -p "Do you want to uninstall all pip dependencies? [y/n/a (ask for each)]: " resp
+    read -p "Do you want to uninstall all pip3 dependencies? [y/n/a (ask for each)]: " resp
     if [ "$resp" = "y" ]; then
-        pip uninstall -y -r requirements.txt
+        pip3 uninstall -y -r requirements.txt
     elif [ "$resp" = "a" ]; then
         while read dep; do
             read -p "Do you want to uninstall $dep? [y/n]: " uninstall_dep
             if [ "$uninstall_dep" = "y" ]; then
-                pip uninstall -y $dep
+                pip3 uninstall -y $dep
             fi
         done < requirements.txt
     fi
@@ -36,7 +36,7 @@ uninstall_pip_deps() {
 # Uninstall process
 echo "Starting the uninstallation process..."
 uninstall_brew_deps
-uninstall_pip_deps
+uninstall_pip3_deps
 echo "Uninstalling jit..."
-pip uninstall -y jit
+pip3 uninstall -y jit
 echo "Uninstallation process completed."

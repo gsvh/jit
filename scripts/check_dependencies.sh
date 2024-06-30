@@ -57,10 +57,10 @@ else
     fi
 fi
 
-# Check for pip
-if ! command -v pip &>/dev/null; then
-    echo "Pip not installed."
-    echo "Please install pip."
+# Check for pip3
+if ! command -v pip3 &>/dev/null; then
+    echo "pip3 not installed."
+    echo "Please install pip3."
 fi
 
 
