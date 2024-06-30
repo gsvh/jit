@@ -49,6 +49,11 @@ else
         echo "llama3 model not found. Do you want to download it now? (y/n)"
         read model_choice
         if [[ "$model_choice" == "y" ]]; then
+            echo "Starting Ollama"
+            bash -c "nohup ollama serve &> /dev/null &"
+            echo "Ollama service started in the background."
+
+            echo "Pulling llama3 model. Strap in, this might take a while."
             ollama pull llama3
             echo "llama3 model downloaded."
         else
