@@ -5,6 +5,7 @@ import subprocess
 
 import yaml
 
+from .constants import CONFIG_FILE_PATH, JIT_DIR
 from .llm import generate_pr_description
 
 log = logging.getLogger("rich")
@@ -55,8 +56,8 @@ Once you have finished making changes to your branch and you have committed them
 instead of doing {purple_git_push} to push your work to the remote, you can use {purple_jit_push} and {bold_jit} will then:
 
 \t{purple_bullet} Check if the current branch is behind the remote.
-\t{purple_bullet} Push the current branch to the remote.
 \t{purple_bullet} Generate a PR description based on the commits and diffs.
+\t{purple_bullet} Push the current branch to the remote.
 \t{purple_bullet} Create a PR on GitHub and return the PR URL.
 
 You can also use {purple_push_dry} to only create the PR description without pushing or creating the pull request.
@@ -86,8 +87,7 @@ Go on now, {italic_jit}!
     for line in welcome_message_lines:
         print(f"{line}")
 
-JIT_DIR = os.path.join(os.environ['HOME'], '.jit')
-CONFIG_FILE_PATH = os.path.join(JIT_DIR, 'config.yaml')
+
 
 def get_repo_config(repo_name):
     """Gets the repository's configuration if it already exists in the config file."""
@@ -125,11 +125,11 @@ def update_config(repo_name):
     """Updates the configuration file with the repository's owner and base branch."""
     ensure_directory_and_config()
     current_owner, current_base_branch = get_repo_config(repo_name)
-    owner = input("Enter the repository's {purple_owner} (current: {current_owner_or_unset}): ".format(
+    owner = input("\tEnter the repository's {purple_owner} (current: {current_owner_or_unset}): ".format(
         purple_owner=make_purple("owner"),
         current_owner_or_unset=current_owner if current_owner else 'Unset'
     ))
-    base_branch = input("Enter the repository's {purple_base_branch} (current: {current_branch_or_unset})\nThis is the branch that the pull request will be made to: ".format(
+    base_branch = input("\tThe {purple_base_branch} is the branch that the pull request will be made to.\n\tEnter the repository's {purple_base_branch} (current: {current_branch_or_unset}): ".format(
         purple_base_branch=make_purple("base branch"),
         current_branch_or_unset=current_base_branch if current_base_branch else 'Unset'
     ))

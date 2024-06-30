@@ -28,6 +28,7 @@ def push(dry, debug):
         logging.basicConfig(level=logging.DEBUG, format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
     else:
         logging.basicConfig(level=logging.INFO, format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
+
     log = logging.getLogger("rich")
     log.debug("Starting the push command...")
 
@@ -50,12 +51,12 @@ def push(dry, debug):
     if branch_is_behind(repo, base_branch, dry):
         log.warning('Please pull the latest changes before pushing.')
         return
+    
+    pr_description = generate_pr(repo, base_branch)
 
     if not dry:
         log.info('Pushing the current branch...')
         repo.git.push('--set-upstream', 'origin', repo.active_branch.name)  
-    
-    pr_description = generate_pr(repo, base_branch)
     
     if dry: 
         log.info('PR Description: {}'.format(pr_description))
@@ -75,3 +76,15 @@ def push(dry, debug):
 def welcome():
     """Shows the welcome banner."""
     banner()
+
+@jit.command()
+@click.option('--repo_name', default=None, help="The name of the repository.")
+def config(repo_name):
+    """Update the repository configuration."""
+    logging.basicConfig(level=logging.INFO, format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
+    if not repo_name:
+      # Get the repo name 
+        repo_path = os.getcwd()
+        repo = git.Repo(repo_path)
+        repo_name = repo.remotes.origin.url.split('/')[-1].replace('.git', '')
+    update_config(repo_name)
