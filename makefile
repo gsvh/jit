@@ -28,3 +28,10 @@ install_jit_editable:
 	@pip install --editable .
 	@echo "jit installed successfully in editable mode"
 	@jit welcome
+
+
+## uninstall_jit: Uninstall the jit package.
+uninstall_jit:
+	@echo "Uninstalling jit"
+	@bash scripts/uninstall.sh
+	@echo "jit uninstalled successfully"
