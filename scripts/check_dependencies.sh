@@ -6,7 +6,7 @@ if ! command -v gh &>/dev/null; then
     echo "GitHub CLI not installed"
     read -p "Install using Homebrew on macOS? (y/n): " choice
     if [[ "$choice" == "y" ]]; then
-         bash scripts/mac_os/brew_install_dependency.sh TOOL=gh
+         bash scripts/mac_os/brew_install_dependency.sh gh
     else
         echo "Please install GitHub CLI manually."
         exit 1
@@ -22,7 +22,7 @@ if ! command -v ollama &>/dev/null; then
     echo "Ollama not installed."
     read -p "Install using Homebrew on macOS? (y/n): " choice
     if [[ "$choice" == "y" ]]; then
-        bash scripts/mac_os/brew_install_dependency.sh TOOL=ollama
+        bash scripts/mac_os/brew_install_dependency.sh ollama
         # After installation, ask to pull the model
         echo "Ollama installed. Do you want to download the llama3 model now? (y/n)"
         read model_choice
