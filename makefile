@@ -8,12 +8,12 @@ develop: check_deps install_jit_editable
 
 ## check_deps: Check for system dependencies like pip, GitHub CLI, and Ollama.
 check_deps:
-	@bash makefile_support_scripts/check_dependencies.sh
+	@bash scripts/check_dependencies.sh
 
 ## install_mac_deps: Install dependencies on macOS using Homebrew.
 install_mac_deps:
 	@echo "Attempting to install dependencies..."
-	@bash makefile_support_scripts/mac_os/brew_install_dependency.sh
+	@bash scripts/mac_os/brew_install_dependency.sh
 
 ## install_jit: Install the jit package.
 install_jit:
