@@ -28,7 +28,9 @@ if ! command -v ollama &>/dev/null; then
         read model_choice
         if [[ "$model_choice" == "y" ]]; then
             echo "Starting Ollama"
-            ollama serve
+            nohup ollama serve &> /dev/null &
+            echo "Ollama service started in the background."
+
             echo "Pulling llama3 model. Strap in, this might take a while."
             ollama pull llama3
             echo "llama3 model downloaded."
