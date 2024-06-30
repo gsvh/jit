@@ -10,10 +10,6 @@ develop: check_deps install_jit_editable
 check_deps:
 	@bash scripts/check_dependencies.sh
 
-## install_mac_deps: Install dependencies on macOS using Homebrew.
-install_mac_deps:
-	@echo "Attempting to install dependencies..."
-	@bash scripts/mac_os/brew_install_dependency.sh
 
 ## install_jit: Install the jit package.
 install_jit:
