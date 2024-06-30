@@ -1,4 +1,4 @@
+# directories
 jit.egg-info
 jit/__pycache__
-
-jit/config.py
+build
