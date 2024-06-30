@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import subprocess
+import sys
 
 import yaml
 
@@ -186,9 +187,12 @@ def parse_diffs(diffs):
 def generate_pr(repo, base_branch):
     log.info('Finding the latest commits from the current branch...')
     commits = list(repo.iter_commits(f'{base_branch}...HEAD'))
-    commit_messages = [commit.message for commit in commits]
+    if not commits:
+        log.error('No commits found from the current branch.')
+        sys.exit(1)
 
-    log.info(f'Number of commits found: {len(commit_messages)}')
+    log.info(f'Number of commits found: {len(commits)}')
+    commit_messages = [commit.message for commit in commits]
     
     log.info(f'Finding diffs between the current branch and {base_branch}...')
     diffs = parse_diffs(repo.git.diff(base_branch, 'HEAD'))
