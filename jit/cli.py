@@ -15,20 +15,22 @@ FORMAT = "%(message)s"
 
 
 @click.group()
-def jit():
-    """jit - A tool to automate PRs."""
-
-
-@jit.command()
-@click.option('--dry', is_flag=True, help="Run the command without creating the PR.")
 @click.option('--debug', is_flag=True, help="Enable debug logging.")
-def push(dry, debug):
-    """Create a PR for the current branch."""
+def jit(debug):
+    """jit - A tool to automate PRs."""
     if debug:
         logging.basicConfig(level=logging.DEBUG, format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
     else:
         logging.basicConfig(level=logging.INFO, format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
 
+
+
+
+
+@jit.command()
+@click.option('--dry', is_flag=True, help="Run the command without creating the PR.")
+def push(dry):
+    """Create a PR for the current branch."""
     log = logging.getLogger("rich")
     log.debug("Starting the push command...")
 
