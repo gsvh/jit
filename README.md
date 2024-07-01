@@ -14,12 +14,17 @@ Before installing jit, ensure you have the following installed:
 - `pip3` for Python package management
 - [Homebrew](https://brew.sh/) (for macOS users) to install certain dependencies
 
+The installation process will prompt you to download the following:
+
+- [Github CLI](https://cli.github.com/)
+- [Ollama](https://ollama.com/) - with the llama3 model
+
 ## Installation
 
 Clone the repository and navigate to the project directory:
 
 ```bash
-git clone https://github.com/yourusername/jit.git
+git clone https://github.com/gsvh/jit.git
 cd jit
 ```
 
@@ -60,7 +65,7 @@ jit welcome
 To uninstall **jit** and optionally remove installed dependencies:
 
 ```bash
-make uninstall_jit
+make uninstall
 ```
 
 ## Contributing
