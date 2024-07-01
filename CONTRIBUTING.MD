@@ -7,7 +7,7 @@ All types of contributions are encouraged and valued. See the [Table of Contents
 > And if you like the project, but just don't have time to contribute, that's fine! There are other easy ways to support the project and show your appreciation, which we would also be very happy about:
 >
 > - Star the project
-> - Tweet about it
+> - Tweet/X about it
 > - Refer this project in your project's readme
 > - Mention the project at local meetups and tell your friends/colleagues
 
@@ -108,7 +108,7 @@ git remote add upstream https://github.com/gsvh/jit.git
 5. `jit push` your new and improved branch once everything looks good 🧼
 6. At this point you can merge into your forked `main` branch or manually change the target branch to the original upstream repo
 7. Tag and reference any issues or enhancements, if any, that this contribution addresses
-8. Your contribution will then be reviewed and considered by the short king 🤴
+8. Your contribution will then be reviewed and considered by the team 👭
 9. Approved pull-requests will automatically be merged by the team 🎉
 10. Sit back and enjoy the fullfilling feeling of open-source collaboration ✨
 
