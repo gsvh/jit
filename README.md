@@ -10,9 +10,9 @@
 
 Before installing jit, ensure you have the following installed:
 
-- Python 3.6 or higher
+- [Python](https://www.python.org/downloads/) 3.6 or higher
 - `pip3` for Python package management
-- Homebrew (for macOS users) to install certain dependencies
+- [Homebrew](https://brew.sh/) (for macOS users) to install certain dependencies
 
 ## Installation
 
