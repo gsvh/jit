@@ -26,8 +26,9 @@ def jit(debug):
 
 
 @jit.command()
+@click.argument('commit_type')
 @click.option('--dry', is_flag=True, help="Run the command without committing.")
-def commit(dry):
+def commit(commit_type,dry):
     """Commit the staged changes in the current branch."""
     log = logging.getLogger("rich")
     log.debug("Starting the commit command...")
@@ -36,9 +37,9 @@ def commit(dry):
     repo_path = os.getcwd()
     repo = git.Repo(repo_path)
 
-    commit_message = generate_commit(repo)
+    commit_message = generate_commit(repo, commit_type)
     if not dry:
-        repo.git.commit(commit_message)
+        repo.index.commit(f"{commit_message}")
     log.info('Commit message: {}'.format(commit_message))
 
 
