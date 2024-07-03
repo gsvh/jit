@@ -163,54 +163,6 @@ def branch_is_behind(repo, base_branch, dry):
     log.info("Current branch is up-to-date with the remote.")
     return False
 
-def inspect_diffs(repo):
-    staging_area = repo.index
-    
-    diffs_output = {}
-    untracked_files_contents = {}
-
-    # Obtain a list of file diffs between the HEAD and the index
-    diffs = staging_area.diff("HEAD")
-    
-    if diffs:
-        for diff in diffs:
-            log.info(diff.a_path)
-            log.info(diff.change_type)
-            # Handle deleted files specifically
-            if diff.deleted_file:
-                # Note that diff.a_path should still exist, showing the old path
-                diffs_output[diff.a_path] = f"Deleted file: {diff.a_path}"
-            else:
-                # Store the diff output in a dictionary keyed by file path
-                diffs_output[diff.a_path] = repo.git.diff('HEAD', diff.a_path)
-    else:
-        print("No staged changes found.")
-
-    # Handling untracked files - storing new files content, not just listing them
-    untracked_files = repo.untracked_files
-    if untracked_files:
-        for file in untracked_files:
-            try:
-                with open(os.path.join(repo.working_dir, file), 'r') as f:
-                    untracked_files_contents[file] = f.read()
-            except Exception as e:
-                print(f"Error reading file {file}: {str(e)}")
-    else:
-        print("No untracked files found.")
-
-    return diffs_output, untracked_files_contents
-    
-def generate_commit(repo):
-    log.debug("Generating the commit message...")
-    
-    diffs, untracked_files_contents = inspect_diffs(repo)
-    if not diffs and not untracked_files_contents:
-        log.error("No changes found to commit.")
-        sys.exit(1)
-    
-    commit_message = generate_commit_message(diffs, untracked_files_contents)
-    return commit_message
-
 def parse_diffs(diffs):
     log.debug("Parsing diffs...")
     diff_list = diffs.split('\n')
@@ -229,6 +181,27 @@ def parse_diffs(diffs):
     
     log.debug(f"Parsed {len(individual_diffs)} diffs.")
     return individual_diffs
+
+
+def get_staged_diffs(repo):
+    log.info('Finding the staged diffs...')
+    raw_staged_diffs = repo.git.diff("HEAD", "--staged" )
+    diffs = parse_diffs(raw_staged_diffs)
+    log.info(f'Number of diffs found: {len(diffs)}')
+    return diffs
+   
+
+
+def generate_commit(repo, commit_type):
+    log.debug("Generating the commit message...")
+    
+    diffs = get_staged_diffs(repo)
+    if not diffs:
+        log.error("No changes found to commit.")
+        sys.exit(1)
+    
+    commit_message = generate_commit_message(diffs, commit_type)
+    return commit_message
 
 
 def generate_pr(repo, base_branch):
