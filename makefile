@@ -3,8 +3,8 @@
 ## setup: Set up the project.
 setup: check_deps install_jit welcome
 
-## re-install: reinstall the project without the welcome banner
-re-install: check_deps install_jit
+## update: update & re-install the project without the welcome banner
+update: check_deps install_jit
 
 ## develop: Set up the project for development with editable install.
 develop: check_deps install_jit_editable welcome
@@ -21,12 +21,15 @@ welcome:
 install_jit:
 	@echo "Installing jit"
 	@pip3 install .
+	@bash scripts/set_dir_env.sh
 	@echo "jit installed successfully"
+
 
 ## install_jit_editable: Install the jit package in editable mode.
 install_jit_editable:
 	@echo "Installing jit in editable mode"
 	@pip3 install --editable .
+	@bash scripts/set_dir_env.sh
 	@echo "jit installed successfully in editable mode"
 
 
