@@ -19,12 +19,17 @@ welcome:
 
 ## install_jit: Install the jit package.
 install_jit:
-	@zsh scripts/install.sh
+	@echo "Installing jit"
+	@pip3 install .
+	@bash scripts/set_dir_env.sh
+	@echo "jit installed successfully"
+
 
 ## install_jit_editable: Install the jit package in editable mode.
 install_jit_editable:
 	@echo "Installing jit in editable mode"
 	@pip3 install --editable .
+	@bash scripts/set_dir_env.sh
 	@echo "jit installed successfully in editable mode"
 
 
