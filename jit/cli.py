@@ -99,7 +99,7 @@ def update():
     # Capture the original working directory
     original_dir = os.getcwd()
 
-    # Get the MY_CURRENT_DIR environment variable
+    # Get the JIT_DIR environment variable
     repo_path = os.getenv('JIT_DIR')
     
     if not repo_path:
