@@ -60,6 +60,14 @@ To view the welcome message and get started:
 jit welcome
 ```
 
+### Updating jit
+
+To update jit to the latest stable version:
+
+```bash
+jit update
+```
+
 ## Uninstallation
 
 To uninstall **jit** and optionally remove installed dependencies:
