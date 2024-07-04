@@ -34,7 +34,6 @@ else
     # You can choose to install it or take other actions here
 fi
 
-echo "HERE!"
 # Check if the variable is already defined in the shell configuration file
 if grep -q "$JIT_DIR=" "$CONFIG_FILE"; then
     # If the variable is already defined, update its value
