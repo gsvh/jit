@@ -1,4 +1,4 @@
-from .constants import COMMIT_MESSAGE_SPECIFICATION, PR_TEMPLATE
+from .constants import PR_TEMPLATE
 
 
 def join_by_newline(items):

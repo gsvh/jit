@@ -205,21 +205,23 @@ def generate_pr(repo, base_branch):
     return pr_description
 
 
-def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch):
+def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch, draft):
     log.info("Creating a pull request via GitHub CLI...")
-    command = [
-        "gh", "api",
-        "--method", "POST",
-        "-H", "Accept: application/vnd.github+json",
-        "-H", "X-GitHub-Api-Version: 2022-11-28",
-        f"/repos/{owner}/{repo}/pulls",
-        "-f", f"title={title}",
-        "-f", f"body={body}",
-        "-f", f"head={head_branch}",
-        "-f", f"base={base_branch}"
-    ]
     
-    result = subprocess.run(command, text=True, capture_output=True)
+    # gh pr create [flags]
+    command = ["gh", "pr", "create"]
+    flags = [
+        f"--repo={owner}/{repo}",
+        f"--title={title}",
+        f"--body={body}",
+        f"--head={head_branch}",
+        f"--base={base_branch}",
+    ]
+    # Add the draft flag if the PR is a draft
+    if draft:
+        flags.append("--draft")
+    
+    result = subprocess.run(command + flags, text=True, capture_output=True)
     if result.returncode == 0:
         log.info("Pull request created successfully.")
         try:

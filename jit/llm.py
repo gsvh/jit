@@ -3,8 +3,7 @@ import logging
 from langchain_community.chat_models import ChatOllama
 from langchain_core.messages import HumanMessage
 
-from .prompts import (get_generate_diff_summary_prompt,
-                      get_generate_pr_description_prompt)
+from .prompts import (get_generate_diff_summary_prompt, get_generate_pr_description_prompt)
 
 log = logging.getLogger("rich")
 
