@@ -6,7 +6,7 @@ import sys
 
 import yaml
 
-from .constants import CONFIG_FILE_PATH, JIT_DIR
+from .constants import CONFIG_FILE_PATH, JIT_DIR, DEFAULT_PR_TEMPLATE
 from .llm import generate_pr_description
 
 log = logging.getLogger("rich")
@@ -199,8 +199,10 @@ def generate_pr(repo, base_branch):
     log.info(f'Finding diffs between the current branch and {base_branch}...')
     diffs = parse_diffs(repo.git.diff(base_branch, 'HEAD'))
     log.info(f'Number of diffs found: {len(diffs)}')
+
+    pr_template = get_pr_template()
     
-    pr_description = generate_pr_description(commit_messages, diffs)
+    pr_description = generate_pr_description(commit_messages, diffs, pr_template)
     log.info('Generated PR description successfully.')
     return pr_description
 
@@ -221,18 +223,39 @@ def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_bran
     if draft:
         flags.append("--draft")
     
+    log.debug(f"Running command: {command}")
+    log.debug("Flags: %s", '\n'.join(flags))
     result = subprocess.run(command + flags, text=True, capture_output=True)
+    log.debug(result)
     if result.returncode == 0:
         log.info("Pull request created successfully.")
-        try:
-            response = json.loads(result.stdout)
-            log.debug(f"Pull request URL: {response['html_url']}")
-            return response['html_url']
-        except (json.JSONDecodeError, KeyError) as e:
-            log.error("Failed to parse response from GitHub API.")
-            log.debug(e)
-            return 'Failed to parse response.'
+        response = result.stdout
+        log.debug(f"Pull request URL: {response}")
+        return response
     else:
         log.error("Failed to create pull request.")
         log.debug(result.stderr)
         return ''
+    
+
+def get_pr_template():
+    """
+    This function checks if there is a .github directory in the current working directory.
+    If there is, it reads the PR template from the .git directory.
+    """
+
+    # Check if there is a .git directory in the current working directory
+    if os.path.isdir('.github'):
+        log.debug("Found a .github directory in the current working directory.")
+        github_dir = os.path.join(os.getcwd(), '.github')
+        pr_template_path = os.path.join(github_dir, 'PULL_REQUEST_TEMPLATE.md')
+        if os.path.isfile(pr_template_path):
+            log.debug(f"Found PULL_REQUEST_TEMPLATE.md in {github_dir}.")
+            with open(pr_template_path, 'r') as pr_template_file:
+                pr_template = pr_template_file.read()
+            return pr_template
+        else:
+            log.debug("No PULL_REQUEST_TEMPLATE.md found in .git directory.")
+    else:
+        log.debug("No .github directory found in the current working directory.")
+    return DEFAULT_PR_TEMPLATE

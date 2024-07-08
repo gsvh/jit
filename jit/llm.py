@@ -15,10 +15,11 @@ pr_description_llm = ChatOllama(model=local_llm, json=True, temperature=0)
 def generate_diff_summary(diff):
     log.debug("Getting the diff summary...")
     prompt = get_generate_diff_summary_prompt(diff)
+    log.debug(f'Prompt: {prompt}')
     response = diff_summary_llm.invoke([HumanMessage(content=prompt)])
     return response.content
 
-def generate_pr_description(commit_messages, diffs):
+def generate_pr_description(commit_messages, diffs, pr_template):
     log.debug("Generating the PR description...")
     diff_descriptions = []
     for index, diff in enumerate(diffs):
@@ -26,8 +27,9 @@ def generate_pr_description(commit_messages, diffs):
         current_diff_summary = generate_diff_summary(diff)
         log.debug(f'Summary of diff {index + 1}: {current_diff_summary}')
         diff_descriptions.append(current_diff_summary)
-    
-    prompt = get_generate_pr_description_prompt(commit_messages, diff_descriptions)
+
+    prompt = get_generate_pr_description_prompt(commit_messages, diff_descriptions, pr_template)
+    log.debug(f'Prompt: {prompt}')
     log.info('Generating the PR description')
     response = pr_description_llm.invoke([HumanMessage(content=prompt)])
     return response.content
