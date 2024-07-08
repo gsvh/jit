@@ -186,28 +186,6 @@ def parse_diffs(diffs):
     log.debug(f"Parsed {len(individual_diffs)} diffs.")
     return individual_diffs
 
-
-def get_staged_diffs(repo):
-    log.info('Finding the staged diffs...')
-    raw_staged_diffs = repo.git.diff("HEAD", "--staged" )
-    diffs = parse_diffs(raw_staged_diffs)
-    log.info(f'Number of diffs found: {len(diffs)}')
-    return diffs
-   
-
-
-def generate_commit(repo, commit_type):
-    log.debug("Generating the commit message...")
-    
-    diffs = get_staged_diffs(repo)
-    if not diffs:
-        log.error("No changes found to commit.")
-        sys.exit(1)
-    
-    commit_message = generate_commit_message(diffs, commit_type)
-    return commit_message
-
-
 def generate_pr(repo, base_branch):
     log.info('Finding the latest commits from the current branch...')
     commits = list(repo.iter_commits(f'{base_branch}...HEAD'))

@@ -7,7 +7,7 @@ import git
 from rich.logging import RichHandler
 
 from .utils import (banner, branch_is_behind, create_pull_request_via_cli,
-                    ensure_directory_and_config, generate_commit, generate_pr,
+                    ensure_directory_and_config,  generate_pr,
                     get_repo_config, update_config)
 
 FORMAT = "%(message)s"
@@ -24,28 +24,6 @@ def jit(debug):
         logging.basicConfig(level=logging.DEBUG, format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
     else:
         logging.basicConfig(level=logging.INFO, format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
-
-
-@jit.command()
-@click.argument('commit_type')
-@click.option('--dry', is_flag=True, help="Run the command without committing.")
-def commit(commit_type,dry):
-    """Commit the staged changes in the current branch."""
-    log = logging.getLogger("rich")
-    log.debug("Starting the commit command...")
-
-    # Get the repo name and branch name
-    repo_path = os.getcwd()
-    repo = git.Repo(repo_path)
-
-    commit_message = generate_commit(repo, commit_type)
-    if not dry:
-        repo.index.commit(f"{commit_message}")
-    log.info('Commit message: {}'.format(commit_message))
-
-
-    
-
 
 @jit.command()
 @click.option('--dry', is_flag=True, help="Run the command without creating the PR.")

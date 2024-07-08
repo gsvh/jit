@@ -3,14 +3,12 @@ import logging
 from langchain_community.chat_models import ChatOllama
 from langchain_core.messages import HumanMessage
 
-from .prompts import (get_generate_commit_message_prompt,
-                      get_generate_diff_summary_prompt,
+from .prompts import (get_generate_diff_summary_prompt,
                       get_generate_pr_description_prompt)
 
 log = logging.getLogger("rich")
 
 local_llm = "llama3"
-commit_llm = ChatOllama(model=local_llm, json=True, temperature=0)
 diff_summary_llm = ChatOllama(model=local_llm, json=True, temperature=0)
 pr_description_llm = ChatOllama(model=local_llm, json=True, temperature=0)
 
@@ -19,12 +17,6 @@ def generate_diff_summary(diff):
     log.debug("Getting the diff summary...")
     prompt = get_generate_diff_summary_prompt(diff)
     response = diff_summary_llm.invoke([HumanMessage(content=prompt)])
-    return response.content
-
-def generate_commit_message(diffs, commit_type):
-    log.debug("Generating the commit message...")
-    prompt = get_generate_commit_message_prompt(diffs, commit_type)
-    response = commit_llm.invoke([HumanMessage(content=prompt)])
     return response.content
 
 def generate_pr_description(commit_messages, diffs):
