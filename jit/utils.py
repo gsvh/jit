@@ -7,7 +7,7 @@ import sys
 import yaml
 
 from .constants import CONFIG_FILE_PATH, JIT_DIR
-from .llm import generate_commit_message, generate_pr_description
+from .llm import generate_pr_description
 
 log = logging.getLogger("rich")
 
