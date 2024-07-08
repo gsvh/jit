@@ -10,16 +10,21 @@
 
 Before installing jit, ensure you have the following installed:
 
-- Python 3.6 or higher
+- [Python](https://www.python.org/downloads/) 3.6 or higher
 - `pip3` for Python package management
-- Homebrew (for macOS users) to install certain dependencies
+- [Homebrew](https://brew.sh/) (for macOS users) to install certain dependencies
+
+The installation process will prompt you to download the following:
+
+- [Github CLI](https://cli.github.com/)
+- [Ollama](https://ollama.com/) - with the llama3 model
 
 ## Installation
 
 Clone the repository and navigate to the project directory:
 
 ```bash
-git clone https://github.com/yourusername/jit.git
+git clone https://github.com/gsvh/jit.git
 cd jit
 ```
 
@@ -55,12 +60,20 @@ To view the welcome message and get started:
 jit welcome
 ```
 
+### Updating jit
+
+To update jit to the latest stable version:
+
+```bash
+jit update
+```
+
 ## Uninstallation
 
 To uninstall **jit** and optionally remove installed dependencies:
 
 ```bash
-make uninstall_jit
+make uninstall
 ```
 
 ## Contributing

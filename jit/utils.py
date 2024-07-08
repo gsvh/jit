@@ -34,7 +34,11 @@ def banner():
     jit = make_purple(jit)
 
     jit_lines = jit.split("\n")
-    terminal_width = os.get_terminal_size().columns 
+    # Attempt to get terminal size, with a fallback
+    try:
+        terminal_width = os.get_terminal_size().columns
+    except OSError:
+        terminal_width = 80  # Fallback width
     banner_width = int(terminal_width / 2)
     if banner_width < 50:
         banner_width = 50
