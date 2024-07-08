@@ -27,7 +27,8 @@ def jit(debug):
 
 @jit.command()
 @click.option('--dry', is_flag=True, help="Run the command without creating the PR.")
-def push(dry):
+@click.option('--draft', is_flag=True, help="Marks the PR as a draft.")
+def push(dry, draft):
     """Create a PR for the current branch."""
     log = logging.getLogger("rich")
     log.debug("Starting the push command...")
@@ -69,7 +70,7 @@ def push(dry):
         body = pr_description
         head_branch = branch_name
         
-        pr_link = create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch)
+        pr_link = create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch, draft)
         log.info('PR Link: {}'.format(pr_link))
 
 @jit.command()
