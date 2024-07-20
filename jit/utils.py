@@ -63,13 +63,15 @@ instead of doing {purple_git_push} to push your work to the remote, you can use 
 \t{purple_bullet} Check if the current branch is behind the remote.
 \t{purple_bullet} Generate a PR description based on the commits and diffs.
 \t{purple_bullet} Push the current branch to the remote.
-\t{purple_bullet} Create a PR on GitHub and return the PR URL.
+\t{purple_bullet} Create a PR (draft) on GitHub and return the PR URL.
 
 You can also use {purple_push_dry} to only create the PR description without pushing or creating the pull request.
 \t* Note that the PR description will be regenerated when you run {purple_jit_push} without the {purple_dry} flag.
 
 A config file will be created in {purple_config_path} to store the owner and base branch of each of the repositories you use {bold_jit} with.
 
+To view debug logs, use the {purple_debug} flag with the core {purple_jit} command.
+\tex. {purple_jit_debug}
 
 Use {purple_help} to see all available commands.
 
@@ -85,6 +87,9 @@ Go on now, {italic_jit}!
     purple_push_dry=make_purple("jit push --dry"),
     purple_dry=make_purple("--dry"),
     purple_config_path=make_purple('~/.jit/config.yaml'),
+    purple_debug=make_purple("--debug"),
+    purple_jit=make_purple("jit"),
+    purple_jit_debug=make_purple("jit --debug push"),
     purple_help=make_purple("jit --help"),
     italic_jit=make_italic("jit")
     )
