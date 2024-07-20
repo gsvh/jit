@@ -6,7 +6,7 @@ import sys
 
 import yaml
 
-from .constants import CONFIG_FILE_PATH, JIT_DIR, DEFAULT_PR_TEMPLATE
+from .constants import CONFIG_FILE_PATH, DEFAULT_PR_TEMPLATE, JIT_DIR
 from .llm import generate_pr_description
 
 log = logging.getLogger("rich")
@@ -207,7 +207,7 @@ def generate_pr(repo, base_branch):
     return pr_description
 
 
-def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch, draft):
+def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch, yolo):
     log.info("Creating a pull request via GitHub CLI...")
     
     # gh pr create [flags]
@@ -221,7 +221,7 @@ def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_bran
         "--assignee=@me",
     ]
     # Add the draft flag if the PR is a draft
-    if draft:
+    if not yolo:
         flags.append("--draft")
     
     log.debug(f"Running command: {command}")
