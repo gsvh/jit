@@ -4,7 +4,7 @@
 
 ## Features
 
-- **Automated PR Creation**: Automatically generates and pushes PRs to GitHub.
+- **Automated PR Creation**: Automatically generates PR description, and creates PR on GitHub.
 
 ## Prerequisites
 
@@ -75,6 +75,14 @@ To uninstall **jit** and optionally remove installed dependencies:
 ```bash
 make uninstall
 ```
+
+# Roadmap
+
+- [ ] Add mark as draft feature 📝
+- [ ] Add PR template compatibility 🧑‍🍳
+- [ ] Make installable using a package manger (no more cloning 🎉)
+- [ ] Add tests 🧪
+- More to come! 🏃
 
 ## Contributing
 
