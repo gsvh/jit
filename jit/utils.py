@@ -218,6 +218,7 @@ def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_bran
         f"--body={body}",
         f"--head={head_branch}",
         f"--base={base_branch}",
+        "--assignee=@me",
     ]
     # Add the draft flag if the PR is a draft
     if draft:

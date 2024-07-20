@@ -13,7 +13,6 @@ def get_generate_diff_summary_prompt(diff):
     ))
 
 def get_generate_pr_description_prompt(commit_messages, diff_descriptions, pr_template):
-    pr_template_first_line = pr_template.split('\n')[0]
     return '\n'.join((
         '---'
         'commit messages:',
@@ -26,7 +25,7 @@ def get_generate_pr_description_prompt(commit_messages, diff_descriptions, pr_te
         'Your job is to generate a PR description, here are some more details:',
         '- Generate a concise PR description based only on the commit messages and summaries of the diffs.',
         '- IMPORTANT: follow the PR template. Include all elements mentioned in the PR template.',
-        '- Only respond with the PR description.',
-        f'- IMPORTANT: Do not start your response with anything other than this: "{pr_template_first_line}"'
+        '- IMPORTANT: Only respond with the PR description. Nothing else. Not even a "Here is a generated PR description" message. Respond with the PR description ONLY.',
+        
     ))
 
