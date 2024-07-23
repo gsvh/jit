@@ -1,6 +1,7 @@
 # jit
 
-**jit** is a command-line tool designed to automate the process of creating requests for your projects. It integrates with the GitHub CLI and leverages local language models to generate meaningful PR descriptions based on your commits and diffs.
+**jit** is a command-line tool designed to automate the process of creating pull requests for your projects. 
+It integrates with git, and GitHub CLI and leverages local language models to generate meaningful PR descriptions based on your commits and diffs.
 
 ## Features
 
