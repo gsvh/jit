@@ -6,7 +6,7 @@ import sys
 
 import yaml
 
-from .constants import CONFIG_FILE_PATH, JIT_DIR
+from .constants import CONFIG_FILE_PATH, DEFAULT_PR_TEMPLATE, JIT_DIR
 from .llm import generate_pr_description
 
 log = logging.getLogger("rich")
@@ -63,13 +63,15 @@ instead of doing {purple_git_push} to push your work to the remote, you can use 
 \t{purple_bullet} Check if the current branch is behind the remote.
 \t{purple_bullet} Generate a PR description based on the commits and diffs.
 \t{purple_bullet} Push the current branch to the remote.
-\t{purple_bullet} Create a PR on GitHub and return the PR URL.
+\t{purple_bullet} Create a PR (draft) on GitHub and return the PR URL.
 
 You can also use {purple_push_dry} to only create the PR description without pushing or creating the pull request.
 \t* Note that the PR description will be regenerated when you run {purple_jit_push} without the {purple_dry} flag.
 
 A config file will be created in {purple_config_path} to store the owner and base branch of each of the repositories you use {bold_jit} with.
 
+To view debug logs, use the {purple_debug} flag with the core {purple_jit} command.
+\tex. {purple_jit_debug}
 
 Use {purple_help} to see all available commands.
 
@@ -85,6 +87,9 @@ Go on now, {italic_jit}!
     purple_push_dry=make_purple("jit push --dry"),
     purple_dry=make_purple("--dry"),
     purple_config_path=make_purple('~/.jit/config.yaml'),
+    purple_debug=make_purple("--debug"),
+    purple_jit=make_purple("jit"),
+    purple_jit_debug=make_purple("jit --debug push"),
     purple_help=make_purple("jit --help"),
     italic_jit=make_italic("jit")
     )
@@ -166,7 +171,6 @@ def branch_is_behind(repo, base_branch, dry):
 
     log.info("Current branch is up-to-date with the remote.")
     return False
-    
 
 def parse_diffs(diffs):
     log.debug("Parsing diffs...")
@@ -187,7 +191,6 @@ def parse_diffs(diffs):
     log.debug(f"Parsed {len(individual_diffs)} diffs.")
     return individual_diffs
 
-
 def generate_pr(repo, base_branch):
     log.info('Finding the latest commits from the current branch...')
     commits = list(repo.iter_commits(f'{base_branch}...HEAD'))
@@ -201,38 +204,64 @@ def generate_pr(repo, base_branch):
     log.info(f'Finding diffs between the current branch and {base_branch}...')
     diffs = parse_diffs(repo.git.diff(base_branch, 'HEAD'))
     log.info(f'Number of diffs found: {len(diffs)}')
+
+    pr_template = get_pr_template()
     
-    pr_description = generate_pr_description(commit_messages, diffs)
+    pr_description = generate_pr_description(commit_messages, diffs, pr_template)
     log.info('Generated PR description successfully.')
     return pr_description
 
 
-def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch):
+def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch, yolo):
     log.info("Creating a pull request via GitHub CLI...")
-    command = [
-        "gh", "api",
-        "--method", "POST",
-        "-H", "Accept: application/vnd.github+json",
-        "-H", "X-GitHub-Api-Version: 2022-11-28",
-        f"/repos/{owner}/{repo}/pulls",
-        "-f", f"title={title}",
-        "-f", f"body={body}",
-        "-f", f"head={head_branch}",
-        "-f", f"base={base_branch}"
-    ]
     
-    result = subprocess.run(command, text=True, capture_output=True)
+    # gh pr create [flags]
+    command = ["gh", "pr", "create"]
+    flags = [
+        f"--repo={owner}/{repo}",
+        f"--title={title}",
+        f"--body={body}",
+        f"--head={head_branch}",
+        f"--base={base_branch}",
+        "--assignee=@me",
+    ]
+    # Add the draft flag if the PR is a draft
+    if not yolo:
+        flags.append("--draft")
+    
+    log.debug(f"Running command: {command}")
+    log.debug("Flags: %s", '\n'.join(flags))
+    result = subprocess.run(command + flags, text=True, capture_output=True)
+    log.debug(result)
     if result.returncode == 0:
         log.info("Pull request created successfully.")
-        try:
-            response = json.loads(result.stdout)
-            log.debug(f"Pull request URL: {response['html_url']}")
-            return response['html_url']
-        except (json.JSONDecodeError, KeyError) as e:
-            log.error("Failed to parse response from GitHub API.")
-            log.debug(e)
-            return 'Failed to parse response.'
+        response = result.stdout
+        log.debug(f"Pull request URL: {response}")
+        return response
     else:
         log.error("Failed to create pull request.")
         log.debug(result.stderr)
         return ''
+    
+
+def get_pr_template():
+    """
+    This function checks if there is a .github directory in the current working directory.
+    If there is, it reads the PR template from the .git directory.
+    """
+
+    # Check if there is a .git directory in the current working directory
+    if os.path.isdir('.github'):
+        log.debug("Found a .github directory in the current working directory.")
+        github_dir = os.path.join(os.getcwd(), '.github')
+        pr_template_path = os.path.join(github_dir, 'PULL_REQUEST_TEMPLATE.md')
+        if os.path.isfile(pr_template_path):
+            log.debug(f"Found PULL_REQUEST_TEMPLATE.md in {github_dir}.")
+            with open(pr_template_path, 'r') as pr_template_file:
+                pr_template = pr_template_file.read()
+            return pr_template
+        else:
+            log.debug("No PULL_REQUEST_TEMPLATE.md found in .git directory.")
+    else:
+        log.debug("No .github directory found in the current working directory.")
+    return DEFAULT_PR_TEMPLATE

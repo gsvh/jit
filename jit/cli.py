@@ -1,8 +1,9 @@
 import logging
 import os
-import subprocess
-import click
 import shutil
+import subprocess
+
+import click
 import git
 from rich.logging import RichHandler
 
@@ -15,21 +16,21 @@ FORMAT = "%(message)s"
 
 
 
+
 @click.group()
-def jit():
-    """jit - A tool to automate PRs."""
-
-
-@jit.command()
-@click.option('--dry', is_flag=True, help="Run the command without creating the PR.")
 @click.option('--debug', is_flag=True, help="Enable debug logging.")
-def push(dry, debug):
-    """Create a PR for the current branch."""
+def jit(debug):
+    """jit - A tool to automate PRs."""
     if debug:
         logging.basicConfig(level=logging.DEBUG, format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
     else:
         logging.basicConfig(level=logging.INFO, format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
 
+@jit.command()
+@click.option('--dry', is_flag=True, help="Run the command without creating the PR.")
+@click.option('--yolo', is_flag=True, help="Doesn't mark the PR as draft.")
+def push(dry, yolo):
+    """Create a PR for the current branch."""
     log = logging.getLogger("rich")
     log.debug("Starting the push command...")
 
@@ -70,7 +71,7 @@ def push(dry, debug):
         body = pr_description
         head_branch = branch_name
         
-        pr_link = create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch)
+        pr_link = create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch, yolo)
         log.info('PR Link: {}'.format(pr_link))
 
 @jit.command()
