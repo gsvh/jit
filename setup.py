@@ -34,6 +34,8 @@ setup(
         'rich==13.7.1',
         'langchain_community==0.2.10',
         'langchain_core==0.2.24',
+        'ollama==0.3.0',
+        
     ],
     entry_points={
         'console_scripts': [
