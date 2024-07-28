@@ -1,10 +1,12 @@
-import json
 import logging
 import os
+import platform
 import subprocess
 import sys
 
+import ollama
 import yaml
+from rich.progress import BarColumn, Progress, TaskID, TextColumn
 
 from .constants import CONFIG_FILE_PATH, DEFAULT_PR_TEMPLATE, JIT_DIR
 from .llm import generate_pr_description
@@ -98,6 +100,54 @@ Go on now, {italic_jit}!
         print(f"{line}")
 
 
+def get_model_directory() -> str:
+    system = platform.system()
+    if system == "Darwin":  # macOS
+        return os.path.expanduser("~/.ollama/models")
+    elif system == "Linux":  # Linux
+        return "/usr/share/ollama/.ollama/models"
+    elif system == "Windows":  # Windows
+        return os.path.join(os.environ['USERPROFILE'], ".ollama", "models")
+    else:
+        raise NotImplementedError(f"Unsupported operating system: {system}")
+
+def check_model_downloaded(model_name: str) -> bool:
+    base_model_dir = get_model_directory()
+    
+    # Search for the model in the entire directory
+    for root, dirs, files in os.walk(base_model_dir):
+        for name in dirs + files:
+            if name == model_name:
+                return True
+    return False
+
+def download_model(model_name: str):
+    stream = ollama.pull(model_name, stream=True)
+
+    try: 
+        with Progress(
+            TextColumn("                   Downloading model: {task.fields[model_name]}"),
+            BarColumn(
+                finished_style="purple",
+                complete_style="purple"
+                ),
+            TextColumn("{task.percentage:>5.2f}%")
+        ) as progress:
+            # Add a task to the progress bar
+            task: TaskID = progress.add_task(f"Pulling {model_name}", total=1, model_name=model_name)
+            
+            for chunk in stream:
+                # Check if the chunk has 'total' and 'completed' keys
+                if 'total' in chunk and 'completed' in chunk:
+                    # Update the total if it's different from the current total
+                    if progress.tasks[0].total != chunk['total']:
+                        progress.update(task, total=chunk['total'])
+                    # Update the progress with the completed value
+                    progress.update(task, completed=chunk['completed'])
+        log.info(f"Model {model_name} downloaded successfully.")
+    except Exception as e:
+        log.error(f"Failed to download model {model_name}.")
+        log.debug(e)
 
 def get_repo_config(repo_name):
     """Gets the repository's configuration if it already exists in the config file."""
