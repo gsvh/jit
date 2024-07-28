@@ -1,6 +1,6 @@
 # jit
 
-**jit** is a command-line tool designed to automate the process of creating pull requests for your projects. 
+**jit** is a command-line tool designed to automate the process of creating pull requests for your projects.
 It integrates with git, and GitHub CLI and leverages local language models to generate meaningful PR descriptions based on your commits and diffs.
 
 ## Features
@@ -9,48 +9,37 @@ It integrates with git, and GitHub CLI and leverages local language models to ge
 
 ## Prerequisites
 
-Before installing jit, ensure you have the following installed:
-
-- [Python](https://www.python.org/downloads/) 3.6 or higher
-- `pip3` for Python package management
-- [Homebrew](https://brew.sh/) (for macOS users) to install certain dependencies
-
-The installation process will prompt you to download the following:
-
+- [Python](https://www.python.org/downloads/) 3.11 or higher
 - [Github CLI](https://cli.github.com/)
-- [Ollama](https://ollama.com/) - with the llama3 model
 
 ## Installation
 
-Clone the repository and navigate to the project directory:
-
 ```bash
-git clone https://github.com/gsvh/jit.git
-cd jit
-```
-
-To install **jit**, simply run:
-
-```bash
-make setup
+pip install jit-cli
 ```
 
 ## Usage
 
-Once **jit** is installed, you can start using it to manage your pull requests. Here’s how to get started:
+Once **jit** is installed, you need to download the LLM model.
+
+```bash
+jit pull-model
+```
+
+NOTE: The current model (llama3) is about ~4.7GB, so this step will take some time
 
 ### Creating Pull Requests
 
-To create a pull request for the current branch:
+To create a pull request (draft) for the current branch:
 
 ```bash
 jit push
 ```
 
-To run in dry mode (generate PR description without creating a PR):
+To skip the draft stage and create a live pull request, use the `--yolo` flag:
 
 ```bash
-jit push --dry
+jit push --yolo
 ```
 
 ### Viewing Welcome Message
@@ -61,27 +50,17 @@ To view the welcome message and get started:
 jit welcome
 ```
 
-### Updating jit
-
-To update jit to the latest stable version:
-
-```bash
-jit update
-```
-
 ## Uninstallation
 
-To uninstall **jit** and optionally remove installed dependencies:
-
 ```bash
-make uninstall
+pip uninstall jit-cli
 ```
 
 # Roadmap
 
-- [ ] Add mark as draft feature 📝
-- [ ] Add PR template compatibility 🧑‍🍳
-- [ ] Make installable using a package manger (no more cloning 🎉)
+- [x] ~~Add mark as draft feature~~ Mark PRs as draft by default and add flag to bypass 📝
+- [x] Add PR template compatibility 🧑‍🍳
+- [x] Make installable using a package manger (no more cloning 🎉)
 - [ ] Add tests 🧪
 - More to come! 🏃
 
