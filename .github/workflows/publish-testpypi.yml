@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: testpypi
-      url: https://test.pypi.org/p/jit
+      url: https://test.pypi.org/p/jit-cli
     permissions:
       id-token: write
 
