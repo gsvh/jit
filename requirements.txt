@@ -1,6 +1,0 @@
-click
-GitPython
-setuptools
-rich
-langchain_community
-langchain_core
