@@ -54,8 +54,7 @@ Here are all of the pre-requisites to have in place before you can use {bold_jit
 
 \t{purple_square} You must have the GitHub CLI installed.
 \t{purple_square} You must be logged in to the GitHub CLI.
-\t{purple_square} You must have Ollama installed.
-\t{purple_square} You must have pulled llama3 using Ollama.
+\t{purple_square} You must have pulled llama3 using {purple_pull_model}.
 
 
 {bold_jit} is intended to be used alongside {bold_git}. 
@@ -81,6 +80,7 @@ Go on now, {italic_jit}!
 
 """.format(
     bold_jit=make_bold("jit"), 
+    purple_pull_model=make_purple("jit pull-model"), 
     purple_square=make_purple("□"),
     bold_git=make_bold("git"), 
     purple_git_push=(make_purple("git push")), 
@@ -280,7 +280,7 @@ def generate_pr(repo, base_branch):
     return pr_description
 
 
-def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch, yolo):
+def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch, skip_draft):
     log.info("Creating a pull request via GitHub CLI...")
     
     # gh pr create [flags]
@@ -294,7 +294,7 @@ def create_pull_request_via_cli(owner, repo, title, body, head_branch, base_bran
         "--assignee=@me",
     ]
     # Add the draft flag if the PR is a draft
-    if not yolo:
+    if not skip_draft:
         flags.append("--draft")
     
     log.debug(f"Running command: {command}")

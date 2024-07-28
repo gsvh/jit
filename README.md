@@ -36,10 +36,10 @@ To create a pull request (draft) for the current branch:
 jit push
 ```
 
-To skip the draft stage and create a live pull request, use the `--yolo` flag:
+To skip the draft stage and create a live pull request, use the `--skip-draft` flag:
 
 ```bash
-jit push --yolo
+jit push --skip-draft
 ```
 
 ### Viewing Welcome Message
