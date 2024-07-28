@@ -104,13 +104,19 @@ Here are the steps required to make a contribution:
 git remote add upstream https://github.com/gsvh/jit.git
 ```
 
-4. Make and test changes on a new branch
-5. `jit push` your new and improved branch once everything looks good 🧼
-6. At this point you can merge into your forked `main` branch or manually change the target branch to the original upstream repo
-7. Tag and reference any issues or enhancements, if any, that this contribution addresses
-8. Your contribution will then be reviewed and considered by the team 👭
-9. Approved pull-requests will automatically be merged by the team 🎉
-10. Sit back and enjoy the fullfilling feeling of open-source collaboration ✨
+4. Install the package in editable mode by running the following command from the root
+
+```
+pip install --editable .
+```
+
+5. Make and test changes on a new branch
+6. `jit push` your new and improved branch once everything looks good 🧼
+7. At this point you can merge into your forked `main` branch or manually change the target branch to the original upstream repo
+8. Tag and reference any issues or enhancements, if any, that this contribution addresses
+9. Your contribution will then be reviewed and considered by the team 👭
+10. Approved pull-requests will automatically be merged by the team 🎉
+11. Sit back and enjoy the fullfilling feeling of open-source collaboration ✨
 
 ### Improving The Documentation 📚
 
