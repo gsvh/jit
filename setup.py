@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='jit-cli',
-    version='0.1.0',
+    version='0.1.1',
     description='A command line tool to automatically create pull requests on GitHub',
     long_description=long_description,
     long_description_content_type="text/markdown",
