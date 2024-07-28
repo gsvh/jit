@@ -3,7 +3,8 @@ import logging
 from langchain_community.chat_models import ChatOllama
 from langchain_core.messages import HumanMessage
 
-from .prompts import (get_generate_diff_summary_prompt, get_generate_pr_description_prompt)
+from .prompts import (get_generate_diff_summary_prompt,
+                      get_generate_pr_description_prompt)
 
 log = logging.getLogger("rich")
 
@@ -11,6 +12,9 @@ local_llm = "llama3"
 diff_summary_llm = ChatOllama(model=local_llm, json=True, temperature=0)
 pr_description_llm = ChatOllama(model=local_llm, json=True, temperature=0)
 
+
+
+# investigate ollama python package
 
 def generate_diff_summary(diff):
     log.debug("Getting the diff summary...")

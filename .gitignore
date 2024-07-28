@@ -2,3 +2,5 @@
 jit.egg-info
 jit/__pycache__
 build
+venv
+.env
