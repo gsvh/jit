@@ -149,6 +149,24 @@ def download_model(model_name: str):
         log.error(f"Failed to download model {model_name}.")
         log.debug(e)
 
+def check_github_cli_installed():
+    try:
+        # Run the `gh --version` command to check if GitHub CLI is installed
+        result = subprocess.run(['gh', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        
+          # If the command returns 0, GitHub CLI is installed
+        if result.returncode == 0:
+            log.debug("GitHub CLI is installed.")
+            return True
+        else:
+            log.error("Please install GitHub CLI: https://cli.github.com/")
+            log.info("Remember to log in to GitHub CLI using `gh auth login`.")
+            return False
+    except FileNotFoundError:
+        # If the command is not found, it means GitHub CLI is not installed
+        print("GitHub CLI is not installed.")
+        return False
+
 def get_repo_config(repo_name):
     """Gets the repository's configuration if it already exists in the config file."""
     ensure_directory_and_config()

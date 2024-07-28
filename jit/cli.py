@@ -7,10 +7,10 @@ import click
 import git
 from rich.logging import RichHandler
 
-from .utils import (banner, branch_is_behind, check_model_downloaded,
-                    create_pull_request_via_cli, download_model,
-                    ensure_directory_and_config, generate_pr, get_repo_config,
-                    update_config)
+from .utils import (banner, branch_is_behind, check_github_cli_installed,
+                    check_model_downloaded, create_pull_request_via_cli,
+                    download_model, ensure_directory_and_config, generate_pr,
+                    get_repo_config, update_config)
 
 FORMAT = "%(message)s"
 
@@ -32,6 +32,7 @@ def jit(debug):
         logging.warning("Model llama3 is not downloaded. Please download the model before proceeding.")
         logging.info("Run the following command to download the model: jit pull-model")
         exit(1)
+    check_github_cli_installed()
 
 @jit.command()
 @click.option('--dry', is_flag=True, help="Run the command without creating the PR.")
