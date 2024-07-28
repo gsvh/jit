@@ -1,17 +1,39 @@
 from setuptools import find_packages, setup
 
-
-# Function to read requirements from a file
-def load_requirements(filename='requirements.txt'):
-    with open(filename, 'r') as f:
-        return [line.strip() for line in f if line.strip()]
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
 setup(
     name='jit',
     version='0.1.0',
+    description='A command line tool to automatically create pull requests on GitHub',
+    long_description=long_description,
     packages=find_packages(),
-    include_package_data=True,
-    install_requires=load_requirements(),
+    url='https://github.com/gsvh/jit',
+    author='George S. van Heerden',
+    author_email='georgesebastiaan.vh@gmail.com',
+    license='MIT',
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Operating System :: MacOS',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python :: 3.11',
+        'Topic :: Software Development :: Version Control :: Git',
+        'Topic :: Terminals',
+        'Topic :: Text Processing :: Markup',
+        'Topic :: Utilities'
+    ],
+    install_requires=[
+        'click==8.1.7',
+        'GitPython==3.1.43',
+        'rich==13.7.1',
+        'langchain_community==0.2.10',
+        'langchain_core==0.2.24',
+    ],
     entry_points={
         'console_scripts': [
             'jit=jit.cli:jit',
