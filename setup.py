@@ -1,11 +1,25 @@
 from setuptools import find_packages, setup
+from setuptools.command.develop import develop
+from setuptools.command.install import install
+
+from jit.cli import welcome
+
+
+class PostInstallCommand(install):
+    """Post-installation for installation mode."""
+    def run(self):
+        install.run(self)
+        # run jit welcome command:
+        welcome()
+        
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
     name='jit-cli',
-    version='0.1.1',
+    version='0.1.2',
     description='A command line tool to automatically create pull requests on GitHub',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -39,5 +53,8 @@ setup(
         'console_scripts': [
             'jit=jit.cli:jit',
         ],
+    },
+    cmdclass={
+        'install': PostInstallCommand,
     },
 )

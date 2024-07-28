@@ -1,7 +1,5 @@
 import logging
 import os
-import shutil
-import subprocess
 
 import click
 import git
@@ -36,8 +34,8 @@ def jit(debug):
 
 @jit.command()
 @click.option('--dry', is_flag=True, help="Run the command without creating the PR.")
-@click.option('--yolo', is_flag=True, help="Doesn't mark the PR as draft.")
-def push(dry, yolo):
+@click.option('--skip-draft', is_flag=True, help="Doesn't mark the PR as draft.")
+def push(dry, skip_draft):
     """Create a PR for the current branch."""
     log = logging.getLogger("rich")
     log.debug("Starting the push command...")
@@ -79,7 +77,7 @@ def push(dry, yolo):
         body = pr_description
         head_branch = branch_name
         
-        pr_link = create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch, yolo)
+        pr_link = create_pull_request_via_cli(owner, repo, title, body, head_branch, base_branch, skip_draft)
         log.info('PR Link: {}'.format(pr_link))
 
 @jit.command()
@@ -88,7 +86,7 @@ def welcome():
     banner()
 
 @jit.command()
-@click.option('--repo_name', default=None, help="The name of the repository.")
+@click.option('--repo-name', default=None, help="The name of the repository.")
 def config(repo_name):
     """Update the repository configuration."""
     if not repo_name:
