@@ -32,7 +32,7 @@ setup(
         'click==8.1.7',
         'GitPython==3.1.43',
         'rich==13.7.1',
-        'ollama==0.3.0',
+        'ollama==0.3.1',
 
     ],
     entry_points={
