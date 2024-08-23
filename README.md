@@ -1,6 +1,6 @@
 # jit      
 
-[![Star on GitHub](https://img.shields.io/github/stars/gsvh/jit-cli.svg?style=social)](https://github.com/gsvh/jit-cli/stargazers) [![Forks on GitHub](https://img.shields.io/github/forks/gsvh/jit-cli.svg?style=social)](https://github.com/gsvh/jit-cli) [![Watch on GitHub](https://img.shields.io/github/watchers/gsvh/jit-cli.svg?style=social)](https://github.com/gsvh/jit-cli/watchers) [![Downloads](https://pepy.tech/badge/jit-cli)](https://pepy.tech/project/jit-cli) [![Downloads](https://pepy.tech/badge/jit-cli/month)](https://pepy.tech/project/jit-cli/month) [![Downloads](https://pepy.tech/badge/jit-cli/week)](https://pepy.tech/project/jit-cli/week)
+[![Downloads](https://pepy.tech/badge/jit-cli)](https://pepy.tech/project/jit-cli) [![Downloads](https://pepy.tech/badge/jit-cli/month)](https://pepy.tech/project/jit-cli/month) [![Downloads](https://pepy.tech/badge/jit-cli/week)](https://pepy.tech/project/jit-cli/week)
 
 
 
