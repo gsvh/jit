@@ -31,7 +31,7 @@ setup(
     install_requires=[
         'click==8.1.7',
         'GitPython==3.1.43',
-        'rich==13.8.0',
+        'rich==13.8.1',
         'ollama==0.3.2',
 
     ],
