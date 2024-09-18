@@ -71,4 +71,4 @@ pip uninstall jit-cli
 
 ## Contributing
 
-Contributions to **jit** are welcome! Please refer to the CONTRIBUTING.md file for more details on how to submit pull requests, report issues, or make feature suggestions.
+Contributions to **jit** are welcome! Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file for more details on how to submit pull requests, report issues, or make feature suggestions.
